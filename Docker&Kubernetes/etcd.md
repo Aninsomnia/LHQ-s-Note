@@ -1,3 +1,5 @@
+etcd官方中文文档：https://doczhcn.gitbook.io/etcd/
+
 # 二进制包安装
 
 * 3.5.1版本：
