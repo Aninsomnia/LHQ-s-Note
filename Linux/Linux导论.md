@@ -19,7 +19,42 @@
   * **sed / cut / awk : 文本编辑命令**
   * journal -xe：查看日志及其相关信息
 
+# 常用指令
 
+### 主机名
+
+* 查看主机名：
+
+  ```shell
+  hostname
+  hostnamectl
+  ```
+
+* 更改主机名：
+
+  * 修改`/etc/hostname`文件：
+
+    ```shell
+    echo "MyLinux" > /etc/hostname 
+    ```
+
+    这种方法需要**服务器重启**才能生效。
+
+  * 使用`hostnamectl`命令：
+
+    ```shell
+    hostnamectl set-hostname MyLinux
+    ```
+
+## MV
+
+* 将`/usr/udt/`下的所有文件移到当前目录下：
+
+  ```shell
+  mv /usr/udt/* .
+  ```
+
+  
 
 # 环境变量
 
@@ -66,6 +101,7 @@
 * 进入`/etc/profile`文件：
 
   ```shell
+  vim /etc/profile
   # 在最后一行加上
   export PATH=$PATH:/usr/local/go/bin
   ```

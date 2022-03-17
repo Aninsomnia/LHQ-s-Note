@@ -100,6 +100,8 @@ sudo systemctl enable --now kubelet
 * `kubeadm init`成功后，会给出其他节点想加入集群时需执行的`kubeadm join`指令：
 
   https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#join-nodes
+  
+* 此时集群节点状态为**NotReady**
 
 ### 安装CNI插件
 
@@ -112,4 +114,53 @@ sudo systemctl enable --now kubelet
 ### 清理集群
 
 * 应首先清空**集群中的结点**：https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+
+  ```shell
+  kubectl drain <node name> --delete-emptydir-data --force --ignore-daemonsets
+  kubectl drain <node name> --delete-emptydir-data --force --ignore-daemonsets
+  ```
+
 * 再**对控制平面进行清理**：https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-reset/
+
+  * 对于CentOS：
+
+  ```shell
+  kubeadm reset 
+  
+  sudo yum remove kubeadm kubectl kubelet kubernetes-cni kube*
+  sudo yum autoremove
+  
+  sudo rm -rf ~/.kube
+  ```
+
+  * 对于Debian：
+
+  ```shell
+  kubeadm reset 
+  
+  sudo apt-get purge kubeadm kubectl kubelet kubernetes-cni kube* 
+  sudo apt-get autoremove
+   
+  sudo rm -rf ~/.kube
+  ```
+
+* 或者（来自CSDN）：
+
+  ```shell
+  kubeadm reset -f
+  modprobe -r ipip
+  lsmod
+  rm -rf ~/.kube/
+  rm -rf /etc/kubernetes/
+  rm -rf /etc/systemd/system/kubelet.service.d
+  rm -rf /etc/systemd/system/kubelet.service
+  rm -rf /usr/bin/kube*
+  rm -rf /etc/cni
+  rm -rf /opt/cni
+  rm -rf /var/lib/etcd
+  rm -rf /var/etcd
+  yum clean all
+  yum remove kube*
+  ```
+
+  

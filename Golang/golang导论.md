@@ -7,16 +7,50 @@
 * **编译型**语言
 * **跨平台编译型**语言
 
-# GoPath
+# GoPath&GoRoot
+
+### GoPath
 
 * 存放工程代码的目录位置，需要加入到**环境变量“GOPATH”**中
   * src：源代码
   * bin：可执行文件，需要加入**环境变量“PATH”**中
   * pkg：中间状态包
 
-# GOROOT
+### GOROOT
 
 * 安装的go.exe文件位置，需加入到**环境变量“PATH”**中。
+
+### 配置GoPath和GoRoot
+
+* 将go安装包解压至**`/usr/local`**：
+
+  ```shell
+  tar -zxvf go1.18.linux-amd64.tar.gz -C /usr/local
+  ```
+
+* 在**`/root`**下创建`GoPath`文件夹
+
+* 配置环境变量：
+
+  ```shell
+  vim /etc/profile
+  ```
+
+  将以下内容添加到profile文件中：
+
+  ```shell
+  export GOROOT=/usr/local/go
+  export GOPATH=/root/GoPath
+  export GOBIN=$GOPATH/bin
+  export PATH=$PATH:$GOROOT/bin
+  export PATH=$PATH:$GOPATH/bin
+  ```
+
+  使配置生效：
+
+  ```shell
+  source /etc/profile
+  ```
 
 # VSCode下go-outline等插件安装失败
 

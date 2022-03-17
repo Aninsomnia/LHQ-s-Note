@@ -42,3 +42,12 @@
   https://m8nvad2m.mirror.aliyuncs.com
   ```
 
+# Docker使用
+
+* 删除所有容器：
+
+  ```shell
+  docker rm $(docker ps -aq)
+  ```
+
+  

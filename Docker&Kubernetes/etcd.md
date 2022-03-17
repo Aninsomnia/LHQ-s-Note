@@ -33,6 +33,12 @@
   /tmp/etcd-download-test/etcd
   ```
 
+* 查看成员：
+
+  ```shell
+  ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl member list
+  ```
+  
 * 读写操作：
 
   ```shell
@@ -64,6 +70,17 @@
   cd etcd
   
   ./build.sh
+  ```
+
+
+# etcd使用
+
+### 查看
+
+* 查看成员：
+
+  ```shell
+  ETCDCTL_API=3 etcdctl member list
   ```
 
   
