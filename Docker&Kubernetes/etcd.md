@@ -41,6 +41,22 @@ etcd官方中文文档：https://doczhcn.gitbook.io/etcd/
   ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl member list
   ```
   
+  ```shell
+  ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl -w table --endpoints=192.168.153.130:2379,192.168.153.131:2379 endpoint status
+  ```
+  
+* 删除成员：
+
+  ```shell
+  ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl member remove 
+  ```
+  
+* 添加成员：
+
+  ```shell
+  ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl member add EtcdNode_2 --peer-urls=http://192.168.153.131:2380
+  ```
+  
 * 读写操作：
 
   ```shell
@@ -74,7 +90,6 @@ etcd官方中文文档：https://doczhcn.gitbook.io/etcd/
   ./build.sh
   ```
 
-
 # etcd使用
 
 ### 查看
@@ -83,6 +98,117 @@ etcd官方中文文档：https://doczhcn.gitbook.io/etcd/
 
   ```shell
   ETCDCTL_API=3 etcdctl member list
+  ```
+
+
+### 启动集群
+
+* 启动前，关闭**防火墙**、**iptables**和**SELINUX**：
+
+  ```shell
+  #查看防火墙状态
+  firewall-cmd --state
+  
+  #停止firewall
+  systemctl stop firewalld.service
+  
+  #禁止firewall开机启动
+  systemctl disable firewalld.service</pre>
+  
+  #关闭SELINUX
+  #编辑SELINUX文件
+  vim /etc/selinux/config
+  
+  #将SELINUX=enforcing改为SELINUX=disabled
+  #清除和关闭iptables
+  #清空iptables规则
+  iptables -F
+  
+  #保存
+  iptables-save
+  ```
+
+* 启动：
+
+  ```shell
+  /tmp/etcd-download-test/etcd --name EtcdNode_1 --initial-advertise-peer-urls http://192.168.153.130:2380 \
+    --listen-peer-urls http://192.168.153.130:2380 \
+    --listen-client-urls http://192.168.153.130:2379,http://127.0.0.1:2379 \
+    --advertise-client-urls http://192.168.153.130:2379 \
+    --initial-cluster EtcdNode_1=http://192.168.153.130:2380,EtcdNode_2=http://192.168.153.131:2380 \
+    --initial-cluster-state new
+  ```
+
+  ```shell
+  /tmp/etcd-download-test/etcd --name EtcdNode_2 --initial-advertise-peer-urls http://192.168.153.131:2380 \
+    --listen-peer-urls http://192.168.153.131:2380 \
+    --listen-client-urls http://192.168.153.131:2379,http://127.0.0.1:2379 \
+    --advertise-client-urls http://192.168.153.131:2379 \
+    --initial-cluster EtcdNode_1=http://192.168.153.130:2380,EtcdNode_2=http://192.168.153.131:2380 \
+    --initial-cluster-state new
+  ```
+
+# 创建etcd.service
+
+* 创建配置文件：
+
+  ```shell
+  mkdir /etc/etcd
+  chmod 777 /etc/etcd
+  touch /etc/systemd/system/etcd.service
+  chmod 777 /etc/systemd/system/etcd.service
+  ```
+
+  
+
+  ```shell
+  vim /etc/systemd/system/etcd.service
+  ```
+
+  ```shell
+  [Unit]
+  Description=Etcd Server
+  After=network.target
+  After=network-online.target
+  Wants=network-online.target
+  
+  [Service]
+  Type=notify
+  WorkingDirectory=/tmp/etcd-download-test/
+  ExecStart=/bin/bash -c "/tmp/etcd-download-test/etcd --config-file=/etc/etcd/conf.yml"
+  [Install]
+  WantedBy=multi-user.target
+  ```
+
+  ```shell
+  systemctl daemon-reload
+  systemctl start etcd.service
+  
+  systemctl status etcd
+  ```
+
+  ```shell
+  vi /etc/etcd/conf.yml
+  
+  name: EtcdNode_1
+  data-dir: /tmp/etcd-download-test/data
+  listen-client-urls: http://192.168.153.130:2379,http://127.0.0.1:2379
+  advertise-client-urls: http://192.168.153.130:2379
+  listen-peer-urls: http://192.168.153.130:2380
+  initial-advertise-peer-urls: http://192.168.153.130:2380
+  initial-cluster: EtcdNode_1=http://192.168.153.130:2380,EtcdNode_2=http://192.168.153.131:2380
+  initial-cluster-state: new
+  ```
+
+  ```shell
+  name: EtcdNode_2
+  data-dir: /tmp/etcd-download-test/data
+  listen-client-urls: http://192.168.153.131:2379,http://127.0.0.1:2379
+  advertise-client-urls: http://192.168.153.131:2379
+  listen-peer-urls: http://192.168.153.131:2380
+  initial-advertise-peer-urls: http://192.168.153.131:2380
+  initial-cluster: EtcdNode_1=http://192.168.153.130:2380,EtcdNode_2=http://192.168.153.131:2380
+  initial-cluster-state: new
   ```
 
   

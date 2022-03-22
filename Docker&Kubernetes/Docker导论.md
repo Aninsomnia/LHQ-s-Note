@@ -1,6 +1,7 @@
 ### 配置yum源仓库
 
 ```shell
+ sudo yum install -y yum-utils
  sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
@@ -14,10 +15,20 @@
 
   在其中添加：
 
-  ```shell
+  ```json
+  {
   "registry-mirrors": ["https://m8nvad2m.mirror.aliyuncs.com","http://hub-mirror.c.163.com"]
+  }
   ```
-
+  
+  然后：
+  
+  ```
+  systemctl daemon-reload
+  ```
+  
+  
+  
 * Docker中国区官方镜像
 
   ```shell
@@ -41,6 +52,26 @@
   ```shell
   https://m8nvad2m.mirror.aliyuncs.com
   ```
+
+### 安装Docker
+
+* ```shell
+  sudo yum install docker-ce docker-ce-cli containerd.io
+  ```
+
+* 如果出错：
+
+  ```shell
+  yum install -y https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.5.10-3.1.el7.x86_64.rpm
+  
+  yum install docker-ce docker-ce-cli
+  ```
+
+* ```shell
+  systemctl start docker
+  ```
+
+  
 
 # Docker使用
 
