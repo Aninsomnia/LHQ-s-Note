@@ -190,6 +190,7 @@ etcd官方中文文档：https://doczhcn.gitbook.io/etcd/
   ```shell
   vi /etc/etcd/conf.yml
   
+  cat > /etc/etcd/conf.yml <<EOF
   name: EtcdNode_1
   data-dir: /tmp/etcd-download-test/data
   listen-client-urls: http://192.168.153.130:2379,http://127.0.0.1:2379
@@ -198,9 +199,11 @@ etcd官方中文文档：https://doczhcn.gitbook.io/etcd/
   initial-advertise-peer-urls: http://192.168.153.130:2380
   initial-cluster: EtcdNode_1=http://192.168.153.130:2380,EtcdNode_2=http://192.168.153.131:2380
   initial-cluster-state: new
+  EOF
   ```
-
+  
   ```shell
+  cat > /etc/etcd/conf.yml <<EOF
   name: EtcdNode_2
   data-dir: /tmp/etcd-download-test/data
   listen-client-urls: http://192.168.153.131:2379,http://127.0.0.1:2379
@@ -209,6 +212,11 @@ etcd官方中文文档：https://doczhcn.gitbook.io/etcd/
   initial-advertise-peer-urls: http://192.168.153.131:2380
   initial-cluster: EtcdNode_1=http://192.168.153.130:2380,EtcdNode_2=http://192.168.153.131:2380
   initial-cluster-state: new
+  EOF
   ```
-
+  
+  ```
+  rm -rf /tmp/etcd-download-test/data && /tmp/etcd-download-test/etcd --config-file=/etc/etcd/conf.yml
+  ```
+  
   
