@@ -56,7 +56,8 @@ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 ```shell
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
-sudo systemctl enable --now kubelet 
+sudo systemctl enable kubelet
+sudo systemctl restart kubelet
 ```
 
 * 此时kubelet会因为等待kubeadm指示而陷入不断重启的阻塞循环。
@@ -76,7 +77,7 @@ sudo systemctl enable --now kubelet
   * ①：在init时指定镜像仓库
 
   ```shell
-  kubeadm init --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr=119.23.60.131/16
+  kubeadm init --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr=119.23.60.131/16 --control-plane-endpoint=cluster-endpoint
   ```
 
   * ②：手动下载k8s.grc.io各镜像，然后重新tag
@@ -127,7 +128,7 @@ sudo systemctl enable --now kubelet
   ```shell
   kubeadm reset 
   
-  sudo yum remove kubeadm kubectl kubelet kubernetes-cni kube*
+  sudo yum remove -y kubeadm kubectl kubelet kubernetes-cni kube*
   sudo yum autoremove
   
   sudo rm -rf ~/.kube
