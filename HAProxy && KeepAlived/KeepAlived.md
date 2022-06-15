@@ -107,9 +107,12 @@
 # 启动
 
 * ```
+  
+  
+  systemctl enable keepalived
   systemctl restart keepalived
   ```
-
+  
 * 运行以下命令查看是否成功
 
   ```shell

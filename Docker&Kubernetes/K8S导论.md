@@ -58,6 +58,7 @@ sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
 sudo systemctl enable kubelet
 sudo systemctl restart kubelet
+
 ```
 
 * 此时kubelet会因为等待kubeadm指示而陷入不断重启的阻塞循环。
@@ -70,6 +71,9 @@ sudo systemctl restart kubelet
   kubeadm config images list 
   #specify version
   kubeadm config images list --kubernetes-version=1.21.0
+  
+  kubeadm config print init-defaults --component-configs
+  kubeadm init --config kubeadm-config.yaml
   ```
 
 * 在kubeadm init时不能直接访问默认仓库k8s.grc.io，从而导致init失败：
@@ -81,6 +85,36 @@ sudo systemctl restart kubelet
   ```
 
   * ②：手动下载k8s.grc.io各镜像，然后重新tag
+
+* 如果在init时，containerd为running：
+
+  ```
+  mkdir -p /etc/containerd && containerd config default > /etc/containerd/config.toml
+  systemctl restart containerd
+  ```
+
+* 查看kubelet日志：
+
+  ```
+  tail /var/log/messages
+  journalctl -xeu kubelet
+  ```
+
+  ```
+  
+  ::1     localhost       localhost.localdomain   localhost6      localhost6.localdomain6
+    
+  127.0.0.1 localhost  localhost
+  
+  172.17.51.80 119.23.60.131  119.23.60.131
+  119.23.60.131  k8s-master-1
+  
+  cat >> /etc/hosts << EOF
+  119.23.60.131  k8s-master-1
+  EOF
+  ```
+
+  
 
 * init成功后，设置配置文件：
 
@@ -126,7 +160,7 @@ sudo systemctl restart kubelet
   * 对于CentOS：
 
   ```shell
-  kubeadm reset 
+  kubeadm reset -f
   
   sudo yum remove -y kubeadm kubectl kubelet kubernetes-cni kube*
   sudo yum autoremove
