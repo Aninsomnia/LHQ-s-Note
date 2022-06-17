@@ -34,6 +34,14 @@ https://zhuanlan.zhihu.com/p/82388563
 
   将更新名称为remote_repo 的远程repo上的分支： remote_branch_name ，并在本地创建local_branch_name 本地分支保存远端分支的所有数据。
 
+### pull
+
+* ```shell
+  git pull
+  ```
+
+  
+
 https://segmentfault.com/a/1190000017030384
 
 https://blog.csdn.net/QH_JAVA/article/details/77969010

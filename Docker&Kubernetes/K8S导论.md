@@ -100,22 +100,6 @@ sudo systemctl restart kubelet
   journalctl -xeu kubelet
   ```
 
-  ```
-  
-  ::1     localhost       localhost.localdomain   localhost6      localhost6.localdomain6
-    
-  127.0.0.1 localhost  localhost
-  
-  172.17.51.80 119.23.60.131  119.23.60.131
-  119.23.60.131  k8s-master-1
-  
-  cat >> /etc/hosts << EOF
-  119.23.60.131  k8s-master-1
-  EOF
-  ```
-
-  
-
 * init成功后，设置配置文件：
 
   * 对于非`root`用户：
