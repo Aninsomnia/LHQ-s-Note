@@ -45,7 +45,7 @@ EOF
 ##### 关闭SELinux
 
 ```shell
-Set SELinux in permissive mode (effectively disabling it)
+#Set SELinux in permissive mode (effectively disabling it)
 
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
@@ -72,7 +72,7 @@ sudo systemctl restart kubelet
   #specify version
   kubeadm config images list --kubernetes-version=1.21.0
   
-  kubeadm config print init-defaults --component-configs
+  kubeadm config print init-defaults 
   kubeadm init --config kubeadm-config.yaml
   ```
 
@@ -81,10 +81,22 @@ sudo systemctl restart kubelet
   * ①：在init时指定镜像仓库
 
   ```shell
-  kubeadm init --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr=119.23.60.131/16 --control-plane-endpoint=cluster-endpoint
+  kubeadm init --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=172.17.51.80 
   ```
 
+  ```shell
+  kubeadm init --image-repository registry.cn-hangzhou.aliyuncs.com/google_containers --pod-network-cidr=10.123.0.0/16 --apiserver-advertise-address=172.17.51.80 
+  ```
+
+  
+
   * ②：手动下载k8s.grc.io各镜像，然后重新tag
+
+    ```
+    镜像仓库为registry.cn-hangzhou.aliyuncs.com/google_containers
+    ```
+
+    
 
 * 如果在init时，containerd为running：
 

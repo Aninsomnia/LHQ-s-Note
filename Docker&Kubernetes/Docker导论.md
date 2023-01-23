@@ -17,7 +17,7 @@
 
   ```json
   {
-  "registry-mirrors": ["https://m8nvad2m.mirror.aliyuncs.com","http://hub-mirror.c.163.com"]
+  "registry-mirrors": ["https://registry.docker-cn.com","https://m8nvad2m.mirror.aliyuncs.com","http://hub-mirror.c.163.com"]
   }
   ```
   
@@ -56,7 +56,7 @@
 ### 安装Docker
 
 * ```shell
-  sudo yum install docker-ce docker-ce-cli containerd.io
+  sudo yum install -y docker-ce docker-ce-cli containerd.io
   ```
 
 * 如果出错：
