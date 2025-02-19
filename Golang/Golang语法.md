@@ -28,16 +28,29 @@
 ### for循环
 
 * ```go
-  	for i := 0; i < 10; i++ {
-  	}
-  	
-  	for {
-  	}
-  
   	for strings.Contains(str, "hello") {
   	}
   ```
 
+### range
+
+* 使用`range`关键字可以遍历某个集合，**返回其中每个元素的索引和值。**
+
+  ```go
+  	arr := [...]int{1, 2, 3}
+  	fmt.Println(len(arr))
+  
+  	for index, num := range arr {
+  		fmt.Println(index, num)
+  	}
+  ```
+
+* 注意：使用**range**遍历**字符串**时，返回的索引是**所占内存空间的地址索引**，而**不是字符串中的字符索引（因为某些字符在utf-8中的长度大于一字节，这会导致字符串中某些字符的字符索引要小于所占内存空间的地址索引）。**
+
+### defer
+
+* 使用`defer`关键字，可以保证所有**defered的函数或方法**，在函数返回前被执行。
+* 可以消除**必须时刻惦记进行资源释放的负担。**
 
 # 常量声明 const
 
@@ -257,28 +270,6 @@
 
   上述最后一行代码会报错，因为**"Hello World"这个字符串不允许被修改**。
 
-# 关键字
-
-### range
-
-* 使用`range`关键字可以遍历某个集合，**返回其中每个元素的索引和值。**
-
-  ```go
-  	arr := [...]int{1, 2, 3}
-  	fmt.Println(len(arr))
-  
-  	for index, num := range arr {
-  		fmt.Println(index, num)
-  	}
-  ```
-
-* 注意：使用**range**遍历**字符串**时，返回的索引是**所占内存空间的地址索引**，而**不是字符串中的字符索引（因为某些字符在utf-8中的长度大于一字节，这会导致字符串中某些字符的字符索引要小于所占内存空间的地址索引）。**
-
-### defer
-
-* 使用`defer`关键字，可以保证所有**defered的函数或方法**，在函数返回前被执行。
-* 可以消除**必须时刻惦记进行资源释放的负担。**
-
 # 内置包
 
 ### len()
@@ -356,56 +347,57 @@
 
 # fmt包
 
-### Printf对齐文本
+### Printf
 
-* `%-10v`表示在**右方**填充空格，直至整个输出长度（包含变量输出长度）为10。
-* `%10v`表示在**左方**填充空格，直至整个输出长度（包含变量输出长度）为10。
+* 对齐文本
 
-### printf打印小数
+  * `%-10v`表示在**右方**填充空格，直至整个输出长度（包含变量输出长度）为10。
 
-* ```go
-  	third := 7.0 / 3
-  	fmt.Println(third)
-  	fmt.Printf("%v\n", third)
-  	fmt.Printf("%f\n", third)
-  	fmt.Printf("%.3f\n", third) // 保留小数点后3位
-  	fmt.Printf("%4.3f\n", third) // 保留小数点后3位，并且包含小数点整体长度一共四位，若结果长度过大，则不做修剪；若长度过小，则填充空格
-  	fmt.Printf("%4.2f\n", third) // 
-  	fmt.Printf("%4.1f\n", third) // 若为4，则在左侧填充空格使其长度为4；若为-4，则在右侧填充空格使其长度为4
-  	fmt.Printf("%04.1f\n", third) // 用0填充而不是空格
-  ```
-
-  上述代码打印结果：
-
-  ```go
-  2.3333333333333335
-  2.3333333333333335
-  2.333333
-  2.333
-  2.333
-  2.33
-   2.3
-  02.3
-  ```
+  * `%10v`表示在**左方**填充空格，直至整个输出长度（包含变量输出长度）为10。
 
 
-### Printf打印数字类型
+* 打印小数
 
-* ```go
-  fmt.Printf("%T", i)
-  ```
+  * ```golang
+    	third := 7.0 / 3
+    	fmt.Println(third)
+    	fmt.Printf("%v\n", third)
+    	fmt.Printf("%f\n", third)
+    	fmt.Printf("%.3f\n", third) // 保留小数点后3位
+    	fmt.Printf("%4.3f\n", third) // 保留小数点后3位，并且包含小数点整体长度一共四位，若结果长度过大，则不做修剪；若长度过小，则填充空格
+    	fmt.Printf("%4.2f\n", third) // 
+    	fmt.Printf("%4.1f\n", third) // 若为4，则在左侧填充空格使其长度为4；若为-4，则在右侧填充空格使其长度为4
+    	fmt.Printf("%04.1f\n", third) // 用0填充而不是空格
+    	
+    	2.3333333333333335
+    	2.3333333333333335
+    	2.333333
+    	2.333
+    	2.333
+    	2.33
+     	2.3
+    	02.3
+    ```
 
-### Printf打印十六进制数
+* 打印数字类型
 
-* ```go
-  fmt.Printf("%x", i)
-  ```
+  * ```golang
+    fmt.Printf("%T", i)
+    ```
 
-### Printf打印二进制数
+* 打印十六进制数
 
-* ```go
-  fmt.Printf("%b", i)
-  ```
+  * ```go
+    fmt.Printf("%x", i)
+    ```
+
+
+* 打印二进制数
+
+  * ```golang
+    fmt.Printf("%b", i)
+    ```
+
 
 # math包
 
@@ -472,14 +464,14 @@
 
 # strconv包
 
-* 使用`strconv.Itoa()`将**数字**转换为对应的**数字字符串**（不是数字对应的字符）：<span id="数字转换为字符串"> </span>
+* 使用`strconv.Itoa()`将**数字**转换为对应的**数字字符串**（不是数字对应的字符）：
 
   ```go
   	i := 65
   	j := strconv.Itoa(i)
   ```
 
-* 使用`strconv.Atoi()`将**数字字符串**转换为对应**数字**：<span id="字符串转换为数字"> </span>
+* 使用`strconv.Atoi()`将**数字字符串**转换为对应**数字**：
 
   ```go
   	i := "65"
@@ -499,6 +491,14 @@
   ```go
   	s := []int{1, 21, 546, 1, 23}
   	sort.Ints(s)
+  ```
+
+* 使用`sort.Slice()`对任意切片排序：
+
+  ```golang
+  	sort.Slice(s, func(i, j int) bool {
+  		return s[i] < s[j]
+  	})
   ```
 
 # encoding包
@@ -839,13 +839,6 @@
 
 # 切片（slice）
 
-### 切片的实质
-
-* 一个切片实质上是对一个**底层数组**切分的**窗口（或者视图）**。
-
-* 切片也有类型，只不过**不包括切片长度，只有元素类型**（不同于数组）。
-* 也可以对字符串`string`进行切分，不过**切分的索引是字节数，而不是字符数**。
-
 ### 声明切片方式
 
 * 直接**对一个数组进行切分**：
@@ -1002,83 +995,38 @@
 
 # 接口
 
-### 接口的声明
-
-* 使用`var`关键字：
-
-  ```go
-  type dad struct {
-  	age int
-  }
-  
-  func (d dad) talk() string {
-  	return "666"
-  }
-  
-  func main() {
-  	var person interface {
-  		talk() string
-  	} = dad{age: 10}
-  	fmt.Println(person.talk())
-  }
-  ```
-
-* 使用**类型**复用接口：
-
-  ```go
-  type person interface {
-  	talk() string
-  }
-  type dad struct {
-  	age int
-  }
-  
-  func (d dad) talk() string {
-  	return "666"
-  }
-  ```
-
 
 ### 类型断言
 
-* 使用类型断言可以判断**一个接口`i`是否为`nil`**，并且判断**其存储的值的类型是否为`T`类型**：
+```golang
+// 失败触发panic
+t := x.(T)
 
-  ```go
-  t := i.(T)
+t, ok := x.(T)
+```
+
+* 若T为某个具体类型，断言会**检查 x 的动态类型是否等于具体类型 T；**
+* 若T为某个接口类型，断言会**检查 x 的动态类型是否满足 T：**
+  * 如果检查成功，x 的动态值不会被提取，**返回值是一个类型为 T 的接口值。**
+  * 对一个接口类型的类型断言**改变了类型的表述方式**，改变了可以获取的方法集合（通常更大）。
+* **如果 x 是 nil 接口值，断言都会失败。**
+
+# 通道channel
+
+* 声明channel：
+
+  ```golang
+  var c chan int
   ```
-
-  若断言成功，则将`T`类型的值返回给`t`；若断言失败，则**触发`panic`**
-
-  ```go
-  t, ok := i.(T)
-  ```
-
-  若断言成功，则将`T`类型的值返回给`t`，并且`ok`为`true`；若断言失败，`ok`为`false`，`t`为`T`类型的零值，不会触发`panic`
-
-# 并发
-
-### goroutine
-
-* 执行goroutine，只需在调用前添加`go`关键字即可。
-
-### 通道
 
 * 使用make()函数初始化通道：
 
   ```go
-  	c := make(chan int)
-  ```
-
-* 向通道传输值：
-
-  ```go
-  	c <- 99
-  ```
-
-* 从通道接受值：
-
-  ```go
-  	i := <-c
+  c := make(chan int)
+  // 只读
+  c := make(<-chan int)
+  // 只写
+  c := make(chan<- int)
   ```
 
 ### 多个通道
@@ -1142,15 +1090,3 @@
   		// Todo else
   	}
   ```
-
-### 互斥
-
-* 使用**`sync`**包实现互斥锁：
-
-  ```go
-  	mutex := sync.Mutex{}
-  	mutex.Lock()
-  	defer mutex.Unlock()
-  ```
-
-  
